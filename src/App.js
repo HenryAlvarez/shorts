@@ -5,7 +5,7 @@ import { videoData } from "./data/videoData";
 const App = () => {
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
   const [scrollPosition, setScrollPosition] = useState(0);
-  
+
   const handleScroll = (event) => {
     const { scrollTop, clientHeight, scrollHeight } = event.target;
     const maxScroll = scrollHeight - clientHeight;
@@ -19,6 +19,9 @@ const App = () => {
   
     setScrollPosition(newPosition);
   };
+
+
+  console.log(setCurrentVideoIndex)
 
   return (
     <div className="App" onScroll={handleScroll} style={{ "--scroll-position": `${scrollPosition}px` }}>

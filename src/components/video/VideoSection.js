@@ -50,7 +50,7 @@ const VideoSection = ({ videoUrl, videoDescription, isActive }) => {
 
 
     return (
-        <div className={`video-section`} ref={videoInViewRef}>
+        <div ref={videoInViewRef} className={`video-section-container ${isActive ? "active" : ""}`}>
             {!isPlaying && <div className="paused">Pausado</div>}
             <video
                 className="video-section__video"

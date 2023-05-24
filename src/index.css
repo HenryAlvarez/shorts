@@ -47,6 +47,7 @@ code {
   scroll-snap-type: y mandatory;
   scroll-behavior: smooth;
   will-change: scroll-position;
+  transition: scroll-snap-align 1s ease-in-out;
 
   --scroll-position: 0;
 }

@@ -101,6 +101,7 @@
     font-size: 5rem;
     scroll-snap-align: start;
     scroll-snap-stop: always; /* Asegura que se detenga en el video actual */
+    transition: scroll-snap-align 1s ease-in-out;
   }
   
   .video-section-container.active {
