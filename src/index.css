@@ -25,6 +25,8 @@ code {
   justify-content: flex-start;
   align-items: center;
   flex-direction: column;
+  background-color: #f0f0f0;
+
 }
 
 .header {
@@ -33,15 +35,19 @@ code {
   z-index: 20;
   width: 100%;
   height: 49px;
-  background-color: rgba(43, 141, 58, 0.723);
+  background-color: rgb(255, 255, 255);
   border-bottom: solid 1px #e8e8e8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .scroll-container {
   height: calc(100% - 113px);
   margin-top: 49px;
-  /* width: 100%;
-  max-width: 400px; */
+  /* width: 100%; */
+  /* max-width: 400px; */
+  /* height: 100vh; */
   position: fixed;
   overflow-y: scroll;
   scroll-snap-type: y mandatory;
@@ -52,7 +58,7 @@ code {
   --scroll-position: 0;
 }
 
-.scroll-item {
+/* .scroll-item {
   height: 100%;
   width: 100%;
   scroll-snap-align: start;
@@ -62,7 +68,7 @@ code {
   font-size: 5rem;
   background-color: red;
   border-bottom: 10px solid blue;
-}
+} */
 
 
 .navMobile {
@@ -75,14 +81,14 @@ code {
     height: 64px;
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
-    background-color: #004cac;
+    background-color: #004dac;
 }
 
 
 
 
 /*Chat Gpt*/
-.video-feed {
+/* .video-feed {
   display: flex;
   flex-direction: column;
   overflow-y: scroll;
@@ -103,6 +109,6 @@ code {
   height: auto;
   object-fit: cover;
 }
-
+ */
 
 

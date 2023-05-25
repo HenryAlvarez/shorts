@@ -3,7 +3,6 @@ import VideoSection from "./components/video/VideoSection";
 import { videoData } from "./data/videoData";
 
 const App = () => {
-  const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
   const [scrollPosition, setScrollPosition] = useState(0);
 
   const handleScroll = (event) => {
@@ -21,12 +20,10 @@ const App = () => {
   };
 
 
-  console.log(setCurrentVideoIndex)
 
   return (
     <div className="App" onScroll={handleScroll} style={{ "--scroll-position": `${scrollPosition}px` }}>
       <div className="header">
-          <p>Shorts Videos Tests</p>
       </div>
       <div className="scroll-container">
         {videoData.map((video, index) => (
@@ -34,7 +31,7 @@ const App = () => {
             key={video.id}
             videoUrl={video.url}
             videoDescription={video.description}
-            isActive={currentVideoIndex === index}
+            isActive={index}
           />
         ))}
       </div>
