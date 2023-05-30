@@ -3,20 +3,35 @@ import "./videoSection.css";
 import { useInView } from "react-intersection-observer";
 import { BsFillPlayFill } from "react-icons/bs";
 
-const VideoSection = ({ videoUrl, videoDescription, isActive }) => {
+const VideoSection = ({ videoUrl, videoDescription, isActive, id }) => {
   const videoRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [isLoaded, setIsLoaded] = useState(false);
+  
+  const [showAnimation, setShowAnimation] = useState(true);
+  
   const [videoInViewRef, videoInView, videoInViewEntry] = useInView({
     threshold: 0.5,
   });
-
+  
   const [videoPosition, setVideoPosition] = useState(0);
+  const [isInitialLoad, setIsInitialLoad] = useState(true); // Nuevo estado
+
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setShowAnimation(false);
+    }, 5000); // 10 segundos
+  
+    return () => clearTimeout(timeout); // Limpiar el temporizador al desmontar el componente
+  }, []);
+  
 
   useEffect(() => {
     const video = videoRef.current;
 
-    if (videoInView) {
+    if (videoInView && !isInitialLoad) {
       video.currentTime = videoPosition;
       video.play();
       setIsPlaying(true);
@@ -39,7 +54,7 @@ const VideoSection = ({ videoUrl, videoDescription, isActive }) => {
     return () => {
       video.removeEventListener("loadedmetadata", handleVideoLoad);
     };
-  }, [videoInView, videoRef, videoInViewEntry, videoPosition]);
+  }, [videoInView, videoRef, videoInViewEntry, videoPosition, isLoaded, isInitialLoad]);
 
   const handleVideoClick = () => {
     if (isPlaying) {
@@ -53,7 +68,14 @@ const VideoSection = ({ videoUrl, videoDescription, isActive }) => {
 
   const handleVideoLoad = () => {
     setIsLoading(false);
+    setIsLoaded(true);
+    setIsInitialLoad(false); // Actualizar el estado isInitialLoad
   };
+
+
+  const handleAnimation = () => {
+    setShowAnimation(false)
+  }
 
   return (
     <div ref={videoInViewRef} className={`video-section-container ${isActive ? "active" : ""}`}>
@@ -71,6 +93,13 @@ const VideoSection = ({ videoUrl, videoDescription, isActive }) => {
       >
         <source src={videoUrl} type="video/mp4" />
       </video>
+      {showAnimation ? <div className="overlayDark">
+        <div className="slide-animation-content">
+          <div className="slide-animation">
+            <p onClick={handleAnimation}>Desliza para navegar</p>
+          </div>
+        </div>
+      </div> : null}
       <div className="videoBottomOverlay" onClick={handleVideoClick}>
         <div className="container">
           <h2>{videoDescription}</h2>
