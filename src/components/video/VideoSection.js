@@ -2,12 +2,15 @@ import React, { useState, useRef, useEffect } from "react";
 import "./videoSection.css";
 import { useInView } from "react-intersection-observer";
 import { BsFillPlayFill } from "react-icons/bs";
+import { Modal } from 'antd'
 
 const VideoSection = ({ videoUrl, videoDescription, isActive, id }) => {
   const videoRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isLoaded, setIsLoaded] = useState(false);
+
+  const [isMuted, setIsMuted] = useState(true)
   
   // const [showAnimation, setShowAnimation] = useState(true);
   
@@ -47,6 +50,26 @@ const VideoSection = ({ videoUrl, videoDescription, isActive, id }) => {
     };
   }, [videoInView, videoRef, videoInViewEntry, videoPosition, isLoaded, isInitialLoad]);
 
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+        if (isMuted && id === 1) {
+            Modal.info({
+                open: isMuted,
+                centered: true,
+                title: "Activar Sonido",
+                okText: "Activar Sonido",
+                content:'Activa el sonido para escuchar el audio del video',
+                onOk() {
+                    setIsMuted(false);
+                },
+            });
+        }
+    }, 1000);
+    return () => clearTimeout(timeout);
+}, [id, isMuted]); // Este useEffect solo se ejecuta una vez, cuando se monta el componente
+
+
   const handleVideoClick = () => {
     if (isPlaying) {
       videoRef.current.pause();
@@ -68,6 +91,9 @@ const VideoSection = ({ videoUrl, videoDescription, isActive, id }) => {
   //   setShowAnimation(false)
   // }
 
+
+  console.log(id)
+
   return (
     <div ref={videoInViewRef} className={`video-section-container ${isActive ? "active" : ""}`}>
       {!isPlaying && !isLoading && <div className="paused"><BsFillPlayFill className='icon' /></div>}
@@ -76,7 +102,7 @@ const VideoSection = ({ videoUrl, videoDescription, isActive, id }) => {
         className="video-section__video"
         autoPlay
         loop
-        muted={false}
+        muted={id === 1 ? isMuted : false}
         controls={false}
         playsInline
         onClick={handleVideoClick}
