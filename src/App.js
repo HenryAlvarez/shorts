@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import VideoSection from "./components/video/VideoSection";
+import VideoSectionInitial from "./components/video/VideoSectionCopy";
 import { videoData } from "./data/videoData";
 
 const App = () => {
@@ -29,6 +30,13 @@ const App = () => {
         <p>Shorts Videos Tests</p>
       </div>
       <div className="scroll-container">
+        <VideoSectionInitial
+          key={0}
+          id={0}
+          videoUrl={'https://cdn.travelisimo.com/3f3ea73233384054a0f05e4c78bd9402_3e767cc90c'}
+          videoDescription={'Primer Video'}
+          isActive={0}
+        />
         {videoData.map((video, index) => (
           <VideoSection
             key={video.id}

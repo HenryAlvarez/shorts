@@ -3,35 +3,22 @@ import "./videoSection.css";
 import { useInView } from "react-intersection-observer";
 import { BsFillPlayFill } from "react-icons/bs";
 
-const VideoSection = ({ videoUrl, videoDescription, isActive, id }) => {
+const VideoSectionInitial = ({ videoUrl, videoDescription, isActive, id }) => {
   const videoRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isLoaded, setIsLoaded] = useState(false);
-  
-  // const [showAnimation, setShowAnimation] = useState(true);
-  
+  const [isFirstVideo, setIsFirstVideo] = useState(true); // Nuevo estado
   const [videoInViewRef, videoInView, videoInViewEntry] = useInView({
     threshold: 0.5,
   });
-  
+
   const [videoPosition, setVideoPosition] = useState(0);
-  const [isInitialLoad, setIsInitialLoad] = useState(true); // Nuevo estado
-
-
-  // useEffect(() => {
-  //   const timeout = setTimeout(() => {
-  //     setShowAnimation(false);
-  //   }, 5000); // 10 segundos
-  
-  //   return () => clearTimeout(timeout); // Limpiar el temporizador al desmontar el componente
-  // }, []);
-  
 
   useEffect(() => {
     const video = videoRef.current;
 
-    if (videoInView && !isInitialLoad) {
+    if (videoInView && isLoaded && !isFirstVideo) {
       video.currentTime = videoPosition;
       video.play();
       setIsPlaying(true);
@@ -54,7 +41,7 @@ const VideoSection = ({ videoUrl, videoDescription, isActive, id }) => {
     return () => {
       video.removeEventListener("loadedmetadata", handleVideoLoad);
     };
-  }, [videoInView, videoRef, videoInViewEntry, videoPosition, isLoaded, isInitialLoad]);
+  }, [videoInView, videoRef, videoInViewEntry, videoPosition, isLoaded, isFirstVideo]);
 
   const handleVideoClick = () => {
     if (isPlaying) {
@@ -69,13 +56,12 @@ const VideoSection = ({ videoUrl, videoDescription, isActive, id }) => {
   const handleVideoLoad = () => {
     setIsLoading(false);
     setIsLoaded(true);
-    setIsInitialLoad(false); // Actualizar el estado isInitialLoad
   };
 
+  useEffect(() => {
+    setIsFirstVideo(true); // Reiniciar isFirstVideo al cambiar de video
+  }, [videoUrl]);
 
-  // const handleAnimation = () => {
-  //   setShowAnimation(false)
-  // }
 
   return (
     <div ref={videoInViewRef} className={`video-section-container ${isActive ? "active" : ""}`}>
@@ -93,13 +79,6 @@ const VideoSection = ({ videoUrl, videoDescription, isActive, id }) => {
       >
         <source src={videoUrl} type="video/mp4" />
       </video>
-      {/* {showAnimation ? <div className="overlayDark">
-        <div className="slide-animation-content">
-          <div className="slide-animation">
-            <p onClick={handleAnimation}>Desliza para navegar</p>
-          </div>
-        </div>
-      </div> : null} */}
       <div className="videoBottomOverlay" onClick={handleVideoClick}>
         <div className="container">
           <h2>{videoDescription}</h2>
@@ -119,4 +98,4 @@ const VideoSection = ({ videoUrl, videoDescription, isActive, id }) => {
   );
 };
 
-export default VideoSection;
+export default VideoSectionInitial;
