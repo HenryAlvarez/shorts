@@ -136,7 +136,7 @@ code {
   transform: translateX(-50%);
   animation-name: slide;
   animation-duration: 1.5s;
-  animation-iteration-count: infinite;
+  /* animation-iteration-count: infinite; */
 }
 
 

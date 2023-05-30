@@ -17,15 +17,6 @@ const VideoSection = ({ videoUrl, videoDescription, isActive, id }) => {
   
   const [videoPosition, setVideoPosition] = useState(0);
   const [isInitialLoad, setIsInitialLoad] = useState(true); // Nuevo estado
-
-
-  // useEffect(() => {
-  //   const timeout = setTimeout(() => {
-  //     setShowAnimation(false);
-  //   }, 5000); // 10 segundos
-  
-  //   return () => clearTimeout(timeout); // Limpiar el temporizador al desmontar el componente
-  // }, []);
   
 
   useEffect(() => {
