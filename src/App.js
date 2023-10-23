@@ -44,6 +44,7 @@ const App = () => {
             videoUrl={video.url}
             videoDescription={video.description}
             isActive={currentVideoIndex === index}
+            urlPoster={video.urlPoster}
           />
         ))}
       </div>

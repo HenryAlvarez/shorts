@@ -3,7 +3,7 @@ import "./videoSection.css";
 import { useInView } from "react-intersection-observer";
 import { BsFillPlayFill } from "react-icons/bs";
 
-const VideoSection = ({ videoUrl, videoDescription, isActive }) => {
+const VideoSection = ({ videoUrl, videoDescription, isActive, urlPoster }) => {
   const videoRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
 
@@ -63,6 +63,7 @@ const VideoSection = ({ videoUrl, videoDescription, isActive }) => {
         playsInline
         onClick={handleVideoClick}
         ref={videoRef}
+        poster={urlPoster}
       >
         <source src={videoUrl} type="video/mp4" />
       </video>
