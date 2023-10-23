@@ -3,7 +3,7 @@ import "./videoSection.css";
 import { useInView } from "react-intersection-observer";
 import { BsFillPlayFill } from "react-icons/bs";
 
-const VideoSection = ({ videoUrl, videoDescription, isActive, urlPoster }) => {
+const VideoSection = ({ videoUrl, videoDescription, isActive, posterUrl }) => {
   const videoRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
 
@@ -58,12 +58,13 @@ const VideoSection = ({ videoUrl, videoDescription, isActive, urlPoster }) => {
       <video
         className="video-section__video"
         loop
+        autoPlay={isPlaying}
         muted={false}
         controls={false}
         playsInline
         onClick={handleVideoClick}
         ref={videoRef}
-        poster={urlPoster}
+        poster={posterUrl} // Utiliza la URL de la imagen de portada proporcionada
       >
         <source src={videoUrl} type="video/mp4" />
       </video>
