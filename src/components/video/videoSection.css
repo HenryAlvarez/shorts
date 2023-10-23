@@ -27,6 +27,7 @@
   transform: translate(-50%, -50%);
   font-size: 30px;
   font-size: 20px;
+  z-index: 2;
 }
 
 
@@ -44,6 +45,7 @@
     right: 0;
     padding: 10px 15px;
     padding-top: 50px;
+    z-index: 5;
     background-image: linear-gradient(to bottom, transparent, #004cac);
     /* background-image: linear-gradient(to bottom, transparent, #000000d1, #000); */
   }
@@ -117,6 +119,18 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
+  }
+
+  .video-section__poster {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1;
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
   }
   
   

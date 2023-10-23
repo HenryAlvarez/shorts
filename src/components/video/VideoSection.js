@@ -15,10 +15,10 @@ const VideoSection = ({ videoUrl, videoDescription, isActive, posterUrl }) => {
 
   const handleVideoClick = () => {
     const video = videoRef.current;
-    if (isPlaying) {
+    if (video && isPlaying) {
       video.pause();
       setIsPlaying(false);
-    } else {
+    } else if (video) {
       video.play();
       setIsPlaying(true);
     }
@@ -31,7 +31,7 @@ const VideoSection = ({ videoUrl, videoDescription, isActive, posterUrl }) => {
       video.currentTime = videoPosition;
       setIsPlaying(false); // Comienza en pausa
       setVideoPosition(video.currentTime);
-    } else {
+    } else if (video) {
       video.pause();
       setIsPlaying(false);
       setVideoPosition(video.currentTime);
@@ -42,9 +42,11 @@ const VideoSection = ({ videoUrl, videoDescription, isActive, posterUrl }) => {
     });
 
     return () => {
-      video.removeEventListener("play", () => {
-        video.currentTime = 0;
-      });
+      if (video) {
+        video.removeEventListener("play", () => {
+          video.currentTime = 0;
+        });
+      }
     };
   }, [videoInView, videoRef, videoPosition]);
 
@@ -55,6 +57,7 @@ const VideoSection = ({ videoUrl, videoDescription, isActive, posterUrl }) => {
           <BsFillPlayFill className='icon' />
         </div>
       )}
+
       <video
         className="video-section__video"
         loop
@@ -68,6 +71,10 @@ const VideoSection = ({ videoUrl, videoDescription, isActive, posterUrl }) => {
       >
         <source src={videoUrl} type="video/mp4" />
       </video>
+      {isPlaying ? null :
+        <img className="video-section__poster" src={'https://s3.us-south.cloud-object-storage.appdomain.cloud/bucket-travelisimo/Reel_13010d798f'} alt={videoDescription} />
+      }
+
       <div className="videoBottomOverlay" onClick={handleVideoClick}>
         <div className="container">
           <h2>{videoDescription}</h2>
