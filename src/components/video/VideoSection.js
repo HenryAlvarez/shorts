@@ -2,33 +2,35 @@ import React, { useState, useRef, useEffect } from "react";
 import "./videoSection.css";
 import { useInView } from "react-intersection-observer";
 import { BsFillPlayFill } from "react-icons/bs";
-import { Modal } from 'antd'
 
-const VideoSection = ({ videoUrl, videoDescription, isActive, id }) => {
+const VideoSection = ({ videoUrl, videoDescription, isActive }) => {
   const videoRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-  const [isLoaded, setIsLoaded] = useState(false);
 
-  const [isMuted, setIsMuted] = useState(true)
-  
-  // const [showAnimation, setShowAnimation] = useState(true);
-  
-  const [videoInViewRef, videoInView, videoInViewEntry] = useInView({
+  const [videoInViewRef, videoInView] = useInView({
     threshold: 0.5,
   });
-  
+
   const [videoPosition, setVideoPosition] = useState(0);
-  const [isInitialLoad, setIsInitialLoad] = useState(true); // Nuevo estado
-  
+
+  const handleVideoClick = () => {
+    const video = videoRef.current;
+    if (isPlaying) {
+      video.pause();
+      setIsPlaying(false);
+    } else {
+      video.play();
+      setIsPlaying(true);
+    }
+  };
 
   useEffect(() => {
     const video = videoRef.current;
 
-    if (videoInView && !isInitialLoad) {
+    if (videoInView) {
       video.currentTime = videoPosition;
-      video.play();
-      setIsPlaying(true);
+      setIsPlaying(false); // Comienza en pausa
+      setVideoPosition(video.currentTime);
     } else {
       video.pause();
       setIsPlaying(false);
@@ -39,70 +41,24 @@ const VideoSection = ({ videoUrl, videoDescription, isActive, id }) => {
       video.currentTime = 0;
     });
 
-    video.addEventListener("loadedmetadata", handleVideoLoad);
-
-    if (videoInViewEntry) {
-      console.log("Posición del elemento de video:", videoInViewEntry.boundingClientRect);
-    }
-
     return () => {
-      video.removeEventListener("loadedmetadata", handleVideoLoad);
+      video.removeEventListener("play", () => {
+        video.currentTime = 0;
+      });
     };
-  }, [videoInView, videoRef, videoInViewEntry, videoPosition, isLoaded, isInitialLoad]);
-
-
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-        if (isMuted && id === 1) {
-            Modal.info({
-                open: isMuted,
-                centered: true,
-                title: "Activar Sonido",
-                okText: "Activar Sonido",
-                content:'Activa el sonido para escuchar el audio del video',
-                onOk() {
-                    setIsMuted(false);
-                },
-            });
-        }
-    }, 1000);
-    return () => clearTimeout(timeout);
-}, [id, isMuted]); // Este useEffect solo se ejecuta una vez, cuando se monta el componente
-
-
-  const handleVideoClick = () => {
-    if (isPlaying) {
-      videoRef.current.pause();
-      setIsPlaying(false);
-    } else {
-      videoRef.current.play();
-      setIsPlaying(true);
-    }
-  };
-
-  const handleVideoLoad = () => {
-    setIsLoading(false);
-    setIsLoaded(true);
-    setIsInitialLoad(false); // Actualizar el estado isInitialLoad
-  };
-
-
-  // const handleAnimation = () => {
-  //   setShowAnimation(false)
-  // }
-
-
-  console.log(id)
+  }, [videoInView, videoRef, videoPosition]);
 
   return (
     <div ref={videoInViewRef} className={`video-section-container ${isActive ? "active" : ""}`}>
-      {!isPlaying && !isLoading && <div className="paused"><BsFillPlayFill className='icon' /></div>}
-      {isLoading && <div className="loading">Cargando...</div>}
+      {isPlaying ? null : (
+        <div className="paused" onClick={handleVideoClick}>
+          <BsFillPlayFill className='icon' />
+        </div>
+      )}
       <video
         className="video-section__video"
-        autoPlay
         loop
-        muted={id === 1 ? isMuted : false}
+        muted={false}
         controls={false}
         playsInline
         onClick={handleVideoClick}
@@ -110,13 +66,6 @@ const VideoSection = ({ videoUrl, videoDescription, isActive, id }) => {
       >
         <source src={videoUrl} type="video/mp4" />
       </video>
-      {/* {showAnimation ? <div className="overlayDark">
-        <div className="slide-animation-content">
-          <div className="slide-animation">
-            <p onClick={handleAnimation}>Desliza para navegar</p>
-          </div>
-        </div>
-      </div> : null} */}
       <div className="videoBottomOverlay" onClick={handleVideoClick}>
         <div className="container">
           <h2>{videoDescription}</h2>
